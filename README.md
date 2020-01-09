@@ -58,3 +58,4 @@ $ roslaunch pandar pandar40p_driver.launch
 |timezone| 8|
 |frame_id |hesai40|
 |lidar_topic |/pandar40p/sensor/pandar40p/hesai40/PointCloud2|
+|correction_file |$(find pandar40p)/config/correction.csv|
