@@ -32,10 +32,11 @@ class Pandar40PClient {
     std::string lidarTopic = "/pandar40p/sensor/pandar40p/hesai40/PointCloud2";
     int timezone = 8;
     std::string frameId = std::string("hesai40");
+    std::string correctionFile;
 
     //  parse nodehandle param
     bool ret = parseParameter(nh, &ip, &lidarRecvPort, &gpsRecvPort, \
-            &startAngle, &lidarTopic, &timezone, &frameId);
+            &startAngle, &lidarTopic, &timezone, &frameId, &correctionFile);
     if (!ret) {
         ROS_INFO("Parse parameters failed, please check parameters above.");
         return;
@@ -47,13 +48,14 @@ class Pandar40PClient {
     psdk = new Pandar40PSDK(ip, lidarRecvPort, gpsRecvPort,
             boost::bind(&Pandar40PClient::lidarCallback, this, _1, _2),
             NULL, startAngle * 100, timezone, frameId);
+    psdk->LoadLidarCorrectionFile(correctionFile);
     psdk->Start();
   }
 
   bool parseParameter(ros::NodeHandle nh, std::string* ip, int* lidarRecvPort, \
                       int* gpsRecvPort, int* startAngle, \
                       std::string* lidarTopic, int* timezone, \
-                      std::string* frameId) {
+                      std::string* frameId, std::string* correctionFile) {
     if (nh.hasParam("pandar40p_ip")) {
       nh.getParam("pandar40p_ip", *ip);
     }
@@ -75,7 +77,9 @@ class Pandar40PClient {
     if (nh.hasParam("frame_id")) {
       nh.getParam("frame_id", *frameId);
     }
-
+    if (nh.hasParam("correction_file")) {
+      nh.getParam("correction_file", *correctionFile);
+    }
     std::cout << "Configs: pandar40pIP: " << *ip \
         << ", lidarRecvPort: " << *lidarRecvPort \
         << ", gpsRecvPort: " << *gpsRecvPort \

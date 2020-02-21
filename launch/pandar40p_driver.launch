@@ -6,6 +6,7 @@
 	<arg name="timezone"  default="8"/>
 	<arg name="frame_id"  default="hesai40"/>
 	<arg name="lidar_topic"  default="/pandar40p/sensor/pandar40p/hesai40/PointCloud2"/>
+	<arg name="correction_file"  default="$(find pandar40p)/config/correction.csv"/>
 
 	<node pkg="pandar40p" name="pandar40p" type="pandar40p_node" output="screen" >
 		<param name="pandar40p_ip" type="string" value="$(arg pandar40p_ip)"/>
@@ -15,5 +16,6 @@
 		<param name="timezone"  type="int" value="$(arg timezone)"/>
 		<param name="frame_id"  type="string" value="$(arg frame_id)"/>
 		<param name="lidar_topic"  type="string" value="$(arg lidar_topic)"/>
+		<param name="correction_file"  type="string" textfile="$(arg correction_file)"/>
 	</node>
 </launch>
